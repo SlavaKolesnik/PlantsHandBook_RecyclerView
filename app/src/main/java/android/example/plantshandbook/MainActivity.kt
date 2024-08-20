@@ -4,6 +4,7 @@ import android.content.Intent
 import android.example.plantshandbook.databinding.ActivityMainBinding
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,9 +14,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), PlantAdapter.Listener {
     lateinit var binding: ActivityMainBinding
-    private val adapter = PlantAdapter()
+    private val adapter = PlantAdapter(this)
     private var editLauncher: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,5 +45,11 @@ class MainActivity : AppCompatActivity() {
                 editLauncher?.launch(Intent(this@MainActivity, EditActivity::class.java))
             }
         }
+    }
+
+    override fun onClick(plant: Plant) {
+        startActivity(Intent(this, ContentActivity::class.java).apply {
+            putExtra("item", plant)
+        })
     }
 }
